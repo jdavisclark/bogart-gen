@@ -15,7 +15,8 @@
   "dependencies": {
     "commander": "1.1.1",
     "colors": "0.6.0",
-    "mustache": "0.7.2"
+    "mustache": "0.7.2",
+    "npm": "1.2.25"
   },
   "bin": {
     "bogart": "app.js"
