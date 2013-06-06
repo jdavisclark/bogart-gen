@@ -5,7 +5,7 @@ var fs = require('fs')
 
 exports.RepoMaker = {
 	make: function (modelName, lite, curdir) {
-    var rawTemplate = require("./templates/repo.template");
+    var rawTemplate = require("./templates/repo.jstemplate");
     var genString = mustache.render(rawTemplate, {
       modelName: modelName,
       implement: !lite

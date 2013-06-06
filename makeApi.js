@@ -6,7 +6,7 @@ var fs = require('fs')
 
 exports.ApiMaker = {
 	make: function (modelName, lite, curdir) {
-    var rawTemplate = require("./templates/api.template");
+    var rawTemplate = require("./templates/api.jstemplate");
     var genString = mustache.render(rawTemplate, {
       modelName: modelName,
       implement: !lite
