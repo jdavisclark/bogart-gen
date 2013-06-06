@@ -1,6 +1,5 @@
 var fs = require('fs')
   , colors = require('colors')
-  , templater = require('./templates/api')
   , path = require('path')
   , mustache = require("mustache");
 

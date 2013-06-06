@@ -1,5 +1,5 @@
 var fs = require('fs');
 
-require.extensions['.template'] = function (module, filename) {
+require.extensions['.jstemplate'] = function (module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
 };
