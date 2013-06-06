@@ -1,0 +1,17 @@
+var bogart = require('bogart')
+  , q = bogart.q
+  , path = require('path');
+
+function intercept(pathPattern, nextApp) {
+	return function(req){
+		if(!pathPattern.test(req.pathInfo)) { //Make sure you intercept the correct request(s)
+			return nextApp(req);
+		}
+
+		//Do middleware-y stuff here
+
+		return nextApp(req);
+	}
+}
+
+module.exports = intercept;
