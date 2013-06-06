@@ -6,17 +6,18 @@
   "description": "A suite of Rails-style generators for the awesome Bogart framework.  Work in progress.",
   "homepage": "https://github.com/notduncansmith/bogart-gen",
   "license": "MIT",
-  "repository":
-  { "type": "git",
+  "repository": {
+    "type": "git",
     "url": "git://github.com/notduncansmith/bogart-gen.git"
   },
-  "index":"./app.js",
-  "main": "./app.js",	
+  "index": "./app.js",
+  "main": "./app.js",
   "dependencies": {
-  	"commander": "1.1.1",
-    "colors":"0.6.0"
+    "commander": "1.1.1",
+    "colors": "0.6.0",
+    "mustache": "0.7.2"
   },
   "bin": {
-      "bogart": "app.js"
+    "bogart": "app.js"
   }
 }

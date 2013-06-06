@@ -1,20 +1,16 @@
 var fs = require('fs')
   , colors = require('colors')
   , templater = require('./templates/api')
-  , path = require('path');
+  , path = require('path')
+  , mustache = require("mustache");
 
 exports.ApiMaker = {
 	make: function (modelName, lite, curdir) {
-    var genString = "";
-    var template = templater(modelName);
-
-    if (lite) {
-      genString = template.lite;
-    } else {
-      genString = template.dependencies + template.exports + template.APIInit;
-      genString += template.get + template.set + template.list + template.del;
-      genString += template.exportClose;
-    }
+    var rawTemplate = require("./templates/api.template");
+    var genString = mustache.render(rawTemplate, {
+      modelName: modelName,
+      implement: !lite
+    });
 
     fs.writeFile(path.join(curdir, 'lib', 'apis', modelName + 'Api.js'), genString, function (err) {
       if (err) {

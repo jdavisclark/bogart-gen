@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+require("./requireExtensions");
 var fs = require('fs')
   , repo = require('./makeRepo').RepoMaker
   , api = require('./makeApi').ApiMaker
@@ -24,11 +26,7 @@ program
     }
 
     if (program.api) {
-      if (program.lite) {
-        api.make(program.api, true, process.cwd());
-      } else {
-        api.make(program.api, false, process.cwd());
-      }
+      api.make(program.api, program.lite, process.cwd());
     }
   });
 
