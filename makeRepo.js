@@ -1,21 +1,16 @@
 var fs = require('fs')
   , colors = require('colors')
-  , templater = require('./templates/repo');
+  , templater = require('./templates/repo')
+  , mustache = require("mustache");
 
 exports.RepoMaker = {
 	make: function (modelName, lite, curdir) {
-    var genString = ""
-      , template = templater(modelName);
+    var rawTemplate = require("./templates/repo.template");
+    var genString = mustache.render(rawTemplate, {
+      modelName: modelName,
+      implement: !lite
+    });
 
-
-    if(lite){
-      genString = template.lite;
-    } else {
-      genString = template.dependencies + template.extend;
-      genString += template.get + template.set + template.list + template.del + template.search;
-      genString += template.extendClose;
-    }
-    
     if (!fs.stat(curdir + '/lib'))
     {
       console.log('lib directory not found, creating...'.yellow)
@@ -28,7 +23,7 @@ exports.RepoMaker = {
                 console.log("Error".red + " generating " + modelName + " Repo:\n\n" + err)
                 throw err;
               }
-              
+
               console.log(modelName.green + " Repo successfully generated!".green)
             })
           })
@@ -38,7 +33,7 @@ exports.RepoMaker = {
               console.log("Error".red + " generating " + modelName + " Repo:\n\n" + err)
               throw err;
             }
-            
+
             console.log(modelName.green + " Repo successfully generated!".green)
           })
         }
@@ -52,7 +47,7 @@ exports.RepoMaker = {
                 console.log("Error".red + " generating " + modelName + " Repo:\n\n" + err)
                 throw err;
               }
-              
+
               console.log(modelName.green + " Repo successfully generated!".green)
             })
           })
@@ -62,7 +57,7 @@ exports.RepoMaker = {
               console.log("Error".red + " generating " + modelName + " Repo:\n\n" + err)
               throw err;
             }
-            
+
             console.log(modelName.green + " Repo successfully generated!".green)
           })
         }

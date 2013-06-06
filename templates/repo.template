@@ -1,0 +1,58 @@
+var mysql = require('mysql')
+	, uuid  = require('uuid')
+	, bogart = require('bogart')
+	, util   = require('../util').Util
+	, Repository = require('./repo');
+
+exports.{{modelName}}Repository = Repository.extend({
+	get: function({{modelName}}Id) { {{#implement}}
+		var get{{modelName}}Sql = 'select * from {{modelName}} where id = ?';
+		return query(this, [{{modelName}}Id]);{{/implement}}
+	},
+	set: function ({{modelName}}) { {{#implement}}
+		insertSql = 'insert into ' + {{modelName}} + 'set ?, lastModifiedAt=UTC_TIMESTAMP(), createdAt=UTC_TIMESTAMP();';
+		updateSql = 'update ' + {{modelName}} + ' set ?, lastModifiedAt=UTC_TIMESTAMP() where id=?;';
+		if ({{modelName}}.id === undefined || {{modelName}}.id === null) {
+			{{modelName}}.id = uuid();
+			return this.query(insertSql, [{{modelName}}]);
+		}
+
+		return this.query(updateSql, [{{modelName}}, {{modelName}}.id]); {{/implement}}
+	},
+	list: function ({{modelName}}) { {{#implement}}
+		sql = 'select * from {{modelName}};';
+		return this.query(sql, {{modelName}}); {{/implement}}
+	},
+	del: function ({{modelName}}Id) { {{#implement}}
+		sql = 'delete from {{modelName}} where id = ?';
+		return this.query(sql, {{modelName}}Id); {{/implement}}
+	},
+	search: function (searchOptions, limit) { {{#implement}}
+		var countSql = 'select count(1) as cnt from {{modelName}}';
+
+		searchOptions = searchOptions || {};
+		return this.query(countSql, []).then(function (cntResults) {
+			var pagingQuery = '';
+			searchOptions.sort = searchOptions.sort || 'title';
+			if (searchOptions.sort.indexOf('At') > 0){
+				searchOptions.sort += ' desc';
+			}
+			var queryParams = [];
+
+			if (searchOptions.limit){
+				searchOptions.skip = searchOptions.skip || 0;
+				pagingQuery += ' limit ?, ?'
+				queryParams.push(searchOptions.skip);
+				queryParams.push(searchOptions.limit);
+			}
+
+			var sql = 'select * from {{modelName}} order by ' + searchOptions.sort + pagingQuery;
+
+			return this.query(sql, queryParams).then(function (results) {
+				var start = (searchOptions.skip === 0 && results.length ===0) ? 0 : (searchOptions.skip === 0 ? 1 :searchOptions.skip+1) ;
+				var end = searchOptions.skip + results.length;
+				return { start: start, end: end, pageSize: searchOptions.limit, count: cntResults[0].cnt, results: results };
+			});
+		}.bind(this)); {{/implement}}
+	}
+});
